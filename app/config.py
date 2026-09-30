@@ -3,6 +3,7 @@ Centralized configuration for the Agentic AI RAG Chatbot.
 All values are read from environment variables (see .env.example).
 """
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,6 +20,11 @@ EMBEDDING_DIM = int(os.getenv("EMBEDDING_DIM", "384"))  # matches MiniLM-L6-v2
 # --- Chunking ---
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "800"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "120"))
+
+if CHUNK_OVERLAP >= CHUNK_SIZE:
+    raise ValueError(
+        f"CHUNK_OVERLAP ({CHUNK_OVERLAP}) must be smaller than CHUNK_SIZE ({CHUNK_SIZE})."
+    )
 
 # --- Vector DB: Pinecone ---
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY", "")

@@ -3,6 +3,7 @@ Centralized configuration for the Agentic AI RAG Chatbot.
 All values are read from environment variables (see .env.example).
 """
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,6 +21,11 @@ EMBEDDING_DIM = int(os.getenv("EMBEDDING_DIM", "384"))  # matches MiniLM-L6-v2
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "800"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "120"))
 
+if CHUNK_OVERLAP >= CHUNK_SIZE:
+    raise ValueError(
+        f"CHUNK_OVERLAP ({CHUNK_OVERLAP}) must be smaller than CHUNK_SIZE ({CHUNK_SIZE})."
+    )
+
 # --- Vector DB: Pinecone ---
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY", "")
 PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "agentic-ai-ebook")
@@ -28,10 +34,10 @@ PINECONE_REGION = os.getenv("PINECONE_REGION", "us-east-1")
 
 # --- LLM (generation) ---
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL_NAME = os.getenv("GROQ_MODEL_NAME", "llama-3.1-8b-instant")
+GROQ_MODEL_NAME = os.getenv("GROQ_MODEL_NAME", "openai/gpt-oss-20b")
 
 # --- Retrieval / grounding ---
-TOP_K = int(os.getenv("TOP_K", "4"))
+TOP_K = int(os.getenv("TOP_K", "8"))
 # Below this similarity score, we treat the question as out-of-scope
 # rather than letting the LLM guess.
 MIN_CONFIDENCE_THRESHOLD = float(os.getenv("MIN_CONFIDENCE_THRESHOLD", "0.35"))

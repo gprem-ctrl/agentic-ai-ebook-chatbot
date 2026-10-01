@@ -41,14 +41,14 @@ Pinecone index (cosine, 384-dim)
 1. **Ingest:** the PDF text is split into overlapping chunks that keep their page number. Each chunk is embedded locally and upserted to Pinecone. Chunk IDs are content-hashed, so re-running ingestion is safe.
 2. **Retrieve:** the question is embedded and the top-k most similar chunks are fetched from Pinecone.
 3. **Route:** if the best similarity score is below `MIN_CONFIDENCE_THRESHOLD` (default `0.35`), the graph goes to `refuse` and the LLM is never called.
-4. **Generate:** otherwise the chunks go to Groq (LLaMA 3) with a strict system prompt that only allows answers from the given context. If the model reports the context doesn't contain the answer, the bot refuses.
+4. **Generate:** otherwise the chunks go to Groq (openai/gpt-oss-20b) with a strict system prompt that only allows answers from the given context. If the model reports the context doesn't contain the answer, the bot refuses.
 5. **Grade confidence:** the confidence score is the top Pinecone cosine similarity, or `0.0` when the bot refuses.
 
 **Design choices**
 
 - **Local embeddings** (`sentence-transformers`): no paid API needed for embedding, and results are reproducible.
 - **Pinecone** as the vector DB (the free serverless tier is enough for a document this size).
-- **Groq + LLaMA 3** for fast, free-tier generation.
+- **Groq (openai/gpt-oss-20b)** for fast, free-tier generation.
 - **Threshold before generation:** clearly out-of-scope questions never reach the LLM, which reduces hallucination and saves a call.
 
 ## Setup

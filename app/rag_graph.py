@@ -7,7 +7,7 @@ Graph shape:
     retrieve --(top score <  threshold)--> refuse   --> grade_confidence --> END
 
 - retrieve: embeds the question and queries Pinecone for the top-k chunks
-- generate: asks the LLM (Groq / LLaMA 3) to answer strictly from those chunks;
+- generate: asks the LLM (Groq / gpt-oss-20b) to answer strictly from those chunks;
   if the LLM says the context doesn't contain the answer, the bot refuses
 - refuse: returns the out-of-scope message without calling the LLM
 - grade_confidence: confidence = top retrieval cosine similarity (0.0 if refused)

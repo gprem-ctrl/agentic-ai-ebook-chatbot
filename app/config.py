@@ -34,10 +34,10 @@ PINECONE_REGION = os.getenv("PINECONE_REGION", "us-east-1")
 
 # --- LLM (generation) ---
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL_NAME = os.getenv("GROQ_MODEL_NAME", "llama-3.1-8b-instant")
+GROQ_MODEL_NAME = os.getenv("GROQ_MODEL_NAME", "openai/gpt-oss-20b")
 
 # --- Retrieval / grounding ---
-TOP_K = int(os.getenv("TOP_K", "4"))
+TOP_K = int(os.getenv("TOP_K", "8"))
 # Below this similarity score, we treat the question as out-of-scope
 # rather than letting the LLM guess.
 MIN_CONFIDENCE_THRESHOLD = float(os.getenv("MIN_CONFIDENCE_THRESHOLD", "0.35"))

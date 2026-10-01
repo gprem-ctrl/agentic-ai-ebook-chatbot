@@ -93,7 +93,8 @@ def embed_chunks(chunks: List[Dict], model_name: str = config.EMBEDDING_MODEL_NA
     from sentence_transformers import SentenceTransformer
 
     model = SentenceTransformer(model_name)
-    dim = model.get_sentence_embedding_dimension()
+    get_dim = getattr(model, "get_embedding_dimension", None) or model.get_sentence_embedding_dimension
+    dim = get_dim()
     if dim != config.EMBEDDING_DIM:
         raise RuntimeError(
             f"Embedding model outputs {dim}-dim vectors but EMBEDDING_DIM={config.EMBEDDING_DIM}. "
